@@ -14,6 +14,6 @@ CREATE TABLE IF NOT EXISTS PACIENTE (
 id int auto_increment primary key,
 nome varchar(30),
 sobrenome varchar (30),
-idade int (3));
+idade int );
 
-INSERT INTO PACIENTE (nome, sobrenome, idade) VALUES ('Maria', 'Silva', '37');
+INSERT INTO PACIENTE (nome, sobrenome, idade) VALUES ('Maria', 'Silva', 37);
