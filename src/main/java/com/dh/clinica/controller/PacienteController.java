@@ -1,6 +1,6 @@
 package com.dh.clinica.controller;
 import com.dh.clinica.model.Paciente;
-import com.dh.clinica.service.impl.PacienteServiceImpl;
+import com.dh.clinica.service.impl.PacienteDaoImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,7 +11,7 @@ import java.util.List;
 public class PacienteController {
 
     @Autowired
-    private PacienteServiceImpl pacienteService;
+    private PacienteDaoImpl pacienteService;
 
     @GetMapping("/buscar")
     public List<Paciente> listarTodos() {

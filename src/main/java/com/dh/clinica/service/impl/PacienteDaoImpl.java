@@ -1,8 +1,8 @@
 package com.dh.clinica.service.impl;
 
 import com.dh.clinica.config.ConfiguracaoJDBC;
-import com.dh.clinica.model.Usuario;
-import com.dh.clinica.service.IService;
+import com.dh.clinica.model.Paciente;
+import com.dh.clinica.service.IDao;
 import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
@@ -13,62 +13,59 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class UsuarioServiceImpl implements IService<Usuario> {
+public class PacienteDaoImpl implements IDao<Paciente> {
 
     private ConfiguracaoJDBC configuracaoJDBC ;
 
-    public UsuarioServiceImpl() {
+    public PacienteDaoImpl() {
         this.configuracaoJDBC = new ConfiguracaoJDBC();
     }
-
     @Override
-    public Usuario salvar(Usuario usuario) {
+    public Paciente salvar(Paciente paciente) {
         Connection conexao = configuracaoJDBC.conectarComBancoDeDados();
         Statement stmt = null;
-        String query = String.format("INSERT INTO usuario (nome ,email, senha, nivel_acesso) " +
-                        "VALUES ('%s','%s','%s','%s')", usuario.getNome(),
-                usuario.getEmail(), usuario.getSenha(), usuario.getNivelAcesso());
+        String query = String.format("INSERT INTO PACIENTE (nome ,sobrenome, idade) " +
+                        "VALUES ('%s','%s','%s')", paciente.getNome(),
+                paciente.getSobrenome(), paciente.getIdade());
         try {
             stmt = conexao.createStatement();
             stmt.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
             ResultSet keys = stmt.getGeneratedKeys();
             if (keys.next())
-                usuario.setId(keys.getInt(1));
+                paciente.setId(keys.getInt(1));
             stmt.close();
             conexao.close();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        return usuario;
+        return paciente;
     }
 
-
     @Override
-    public List<Usuario> buscarTodos() {
+    public List<Paciente> buscarTodos() {
         Connection conexao = configuracaoJDBC.conectarComBancoDeDados();
         Statement stmt = null;
-        String query = "SELECT * FROM USUARIO";
-        List<Usuario> usuarios = new ArrayList<>();
+        String query = "SELECT * FROM PACIENTE";
+        List<Paciente> pacientes = new ArrayList<>();
         try {
             stmt = conexao.createStatement();
             ResultSet result = stmt.executeQuery(query);
             while (result.next()) {
-                usuarios.add(criarObjetoUsuario(result));
+                pacientes.add(criarObjetoPaciente(result));
             }
             stmt.close();
             conexao.close();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        return usuarios;
+        return pacientes;
     }
-
 
     @Override
     public void excluir(Integer id) {
         Connection conexao = configuracaoJDBC.conectarComBancoDeDados();
         Statement stmt = null;
-        String query = String.format("DELETE FROM USUARIO WHERE ID = %s", id);
+        String query = String.format("DELETE FROM PACIENTE WHERE id = %s", id);
         try {
             stmt = conexao.createStatement();
             stmt.executeUpdate(query);
@@ -79,15 +76,13 @@ public class UsuarioServiceImpl implements IService<Usuario> {
         }
     }
 
-
-    private Usuario criarObjetoUsuario(ResultSet resultado) throws SQLException {
-        Integer id = resultado.getInt("ID");
-        String nome = resultado.getString("NOME");
-        String email = resultado.getString("EMAIL");
-        String senha = resultado.getString("SENHA");
-        String nivelAcesso = resultado.getString("NIVEL_ACESSO");
-        Usuario usuario = new Usuario(id, nome, email, senha, nivelAcesso);
-        return usuario;
+    private Paciente criarObjetoPaciente(ResultSet resultado) throws SQLException {
+        Integer id = resultado.getInt("id");
+        String nome = resultado.getString("nome");
+        String sobrenome = resultado.getString("sobrenome");
+        Integer idade = resultado.getInt("idade");
+        Paciente paciente = new Paciente(id, nome, sobrenome, idade);
+        return paciente;
     }
 
 }

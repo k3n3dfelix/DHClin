@@ -1,7 +1,8 @@
 package com.dh.clinica.controller;
 
 import com.dh.clinica.model.Usuario;
-import com.dh.clinica.service.impl.UsuarioServiceImpl;
+import com.dh.clinica.service.UsuarioService;
+import com.dh.clinica.service.impl.UsuarioDaoImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,10 +13,10 @@ import java.util.List;
 public class UsuarioController {
 
     @Autowired
-    private UsuarioServiceImpl usuarioService;
+    private UsuarioService usuarioService;
 
     @GetMapping("/buscar")
-    public List<Usuario> listarTodos() {
+    public List<Usuario> buscarTodos() {
         return usuarioService.buscarTodos();
     }
 

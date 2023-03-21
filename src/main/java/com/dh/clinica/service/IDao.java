@@ -2,7 +2,7 @@ package com.dh.clinica.service;
 
 import java.util.List;
 
-public interface IService <Objeto>{
+public interface IDao<Objeto>{
 
     Objeto salvar(Objeto objeto);
 
